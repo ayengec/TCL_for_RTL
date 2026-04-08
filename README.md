@@ -36,6 +36,22 @@ Here's why it actually matters in practice:
 In short: TCL is not the most glamorous language, and it has its quirks, but fluency in it is one of those practical skills that quietly makes a digital design engineer significantly more effective.
 
 ---
+## Why Every RTL Engineer Should Master TCL?
+
+In the world of FPGA and ASIC design, GUI is for exploration, but TCL is for production. While clicking buttons in Vivado or Quartus works for small projects, professional hardware design requires automation, repeatability, and precision.
+
+Here is why TCL is my go-to scripting language in this repo:
+
+Eliminating Human Error: Automating the build flow (Synthesis, Implementation, Bitstream generation) ensures that the exact same process is followed every time, avoiding "magic clicks" in the GUI.
+
+EDA Tool Mastery: Almost every major EDA tool (Vivado, Quartus, ModelSim, Genus, Innovus) uses TCL as its native command language. If you know TCL, you own the tool.
+
+Version Control Friendly: Instead of tracking huge binary project files (like .xpr or .qpf), I track a single TCL script that recreates the entire project from scratch. This keeps my repositories clean and Git-friendly.
+
+Custom Reporting & Constraints: TCL allows me to parse timing reports and generate custom power/area analyses that the standard GUI doesn't provide.
+
+"If you are doing the same task twice in an EDA tool, you should have scripted it in TCL already."
+---
 
 ## Contents
 
