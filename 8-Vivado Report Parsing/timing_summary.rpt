@@ -1,0 +1,177 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2022.2 (lin64) Build 3671981 Fri Oct 14 04:59:54 MDT 2022
+| Date         : Mon May  9 14:32:17 2025
+| Host         : ubuntu-build-01 running 64-bit Ubuntu 20.04.6 LTS
+| Command      : report_timing_summary -delay_type min_max -report_unconstrained
+|                -check_timing_verbose -max_paths 10 -input_pins -routable_nets
+|                -file reports/timing_summary.rpt
+| Design       : axi_image_pipeline_top
+| Device       : xc7z020clg400-1
+| Speed File   : -1
+| Design State : Routed
+---------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------------
+| Timer Settings
+| --------------
+------------------------------------------------------------------------------------------------
+
+  Enable Multi Corner Analysis               :  Yes
+  Enable Pessimism Removal                   :  Yes
+  Pessimism Removal Resolution               :  Nearest Common Node
+  Enable Input Delay Default Clock           :  No
+  Enable Preset / Clear Arcs                 :  No
+  Disable Flight Delays                      :  No
+  Ignore I/O Paths                           :  No
+  Timing Early Launch at Borrowing Latches   :  No
+  Borrow Time for Max Delay Exceptions       :  Yes
+  Merge Timing Exceptions                    :  Yes
+
+------------------------------------------------------------------------------------------------
+| Design Timing Summary
+| ---------------------
+------------------------------------------------------------------------------------------------
+
+    WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+    -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+     -1.247      -89.412                     37                 4821        0.043        0.000                      0                 4821        0.500        0.000                       0                  5304  
+
+
+** WARNING: WNS is negative. Timing constraints are NOT met. **
+
+------------------------------------------------------------------------------------------------
+| Clock Summary
+| -------------
+------------------------------------------------------------------------------------------------
+
+Clock         Waveform(ns)       Period(ns)      Frequency(MHz)
+-----         ------------       ----------      --------------
+clk_100MHz    {0.000 5.000}      10.000          100.000         
+clk_200MHz    {0.000 2.500}       5.000          200.000         
+clk_pixel     {0.000 6.734}      13.468           74.250         
+axi_aclk      {0.000 5.000}      10.000          100.000         
+
+------------------------------------------------------------------------------------------------
+| Intra Clock Table
+| -----------------
+------------------------------------------------------------------------------------------------
+
+Clock             WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+-----             -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+clk_100MHz         -1.247      -89.412                     37                 2341        0.043        0.000                      0                 2341        0.500        0.000                       0                  2617  
+clk_200MHz          0.312        0.000                      0                 1204        0.061        0.000                      0                 1204        0.500        0.000                       0                  1311  
+clk_pixel           0.893        0.000                      0                  832        0.038        0.000                      0                  832        0.635        0.000                       0                   921  
+axi_aclk            0.215        0.000                      0                  444        0.055        0.000                      0                  444        0.500        0.000                       0                   455  
+
+------------------------------------------------------------------------------------------------
+| Inter Clock Table
+| -----------------
+------------------------------------------------------------------------------------------------
+
+From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints
+----------    --------          -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------
+clk_100MHz    clk_200MHz          0.087        0.000                      0                   12        0.021        0.000                      0                   12
+clk_pixel     axi_aclk           -0.412       -3.296                      8                   44        0.019        0.000                      0                   44
+
+------------------------------------------------------------------------------------------------
+| Other Path Groups Table
+| -----------------------
+------------------------------------------------------------------------------------------------
+
+Path Group    From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints
+----------    ----------    --------          -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------
+(No other path groups)
+
+------------------------------------------------------------------------------------------------
+| Timing Details
+| --------------
+------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------
+From Clock:  clk_100MHz
+  To Clock:  clk_100MHz
+
+Setup :           37  Failing Endpoints,  Worst Slack       -1.247ns,  Total Violation     -89.412ns
+Hold  :            0  Failing Endpoints,  Worst Slack        0.043ns,  Total Violation       0.000ns
+PW    :            0  Failing Endpoints,  Worst Slack        0.500ns,  Total Violation       0.000ns
+---------------------------------------------------------------------------------------------------
+
+Max Delay Paths
+--------------------------------------------------------------------------------------
+Slack (VIOLATED) :        -1.247ns  (required time - arrival time)
+  Source:                 u_sobel_core/u_gradient_x/dsp_chain_reg[4]/C
+                            (rising edge-triggered cell FDRE clocked by clk_100MHz)
+  Destination:            u_sobel_core/u_gradient_norm/dsp_result_reg[15]/D
+                            (rising edge-triggered cell FDRE clocked by clk_100MHz)
+  Path Group:             clk_100MHz
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (clk_100MHz rise@10.000ns - clk_100MHz rise@0.000ns)
+  Data Path Delay:        10.897ns  (logic 6.234ns (57.20%)  route 4.663ns (42.80%))
+  Logic Levels:           14  (CARRY4=4 DSP48E1=2 LUT3=1 LUT4=2 LUT5=3 LUT6=2)
+  Clock Path Skew:        -0.158ns (DCD - SCD + CPP)
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+  Clock Net Delay (Source): 1.643ns (routing 0.892ns, distribution 0.751ns)
+  Clock Net Delay (Dest):   1.512ns (routing 0.834ns, distribution 0.678ns)
+  Total Delay:            11.247ns
+
+Slack (VIOLATED) :        -0.934ns  (required time - arrival time)
+  Source:                 u_line_buffer/bram_ctrl_reg[2]/C
+                            (rising edge-triggered cell FDRE clocked by clk_100MHz)
+  Destination:            u_axi_master/rd_addr_reg[17]/D
+                            (rising edge-triggered cell FDRE clocked by clk_100MHz)
+  Path Group:             clk_100MHz
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (clk_100MHz rise@10.000ns - clk_100MHz rise@0.000ns)
+  Data Path Delay:        10.592ns  (logic 4.871ns (45.99%)  route 5.721ns (54.01%))
+  Logic Levels:           11  (CARRY4=2 LUT4=3 LUT5=2 LUT6=4)
+
+Slack (VIOLATED) :        -0.721ns  (required time - arrival time)
+  Source:                 u_histogram_eq/lut_rd_reg[7]/C
+                            (rising edge-triggered cell FDRE clocked by clk_100MHz)
+  Destination:            u_histogram_eq/lut_wr_addr_reg[9]/D
+                            (rising edge-triggered cell FDRE clocked by clk_100MHz)
+  Path Group:             clk_100MHz
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (clk_100MHz rise@10.000ns - clk_100MHz rise@0.000ns)
+  Data Path Delay:        10.379ns  (logic 5.102ns (49.16%)  route 5.277ns (50.84%))
+  Logic Levels:           12  (CARRY4=3 LUT3=2 LUT5=4 LUT6=3)
+
+Min Delay Paths
+--------------------------------------------------------------------------------------
+Slack (MET) :              0.043ns  (arrival time - required time)
+  Source:                 u_sobel_core/u_gradient_x/dsp_chain_reg[1]/C
+                            (rising edge-triggered cell FDRE clocked by clk_100MHz)
+  Destination:            u_sobel_core/u_gradient_x/dsp_chain_reg[2]/D
+                            (rising edge-triggered cell FDRE clocked by clk_100MHz)
+  Path Group:             clk_100MHz
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (clk_100MHz rise@0.000ns - clk_100MHz rise@0.000ns)
+  Data Path Delay:        0.215ns  (logic 0.141ns (65.58%)  route 0.074ns (34.42%))
+  Logic Levels:           0  
+  Clock Path Skew:        0.172ns
+
+---------------------------------------------------------------------------------------------------
+From Clock:  clk_pixel
+  To Clock:  axi_aclk
+
+Setup :            8  Failing Endpoints,  Worst Slack       -0.412ns,  Total Violation      -3.296ns
+Hold  :            0  Failing Endpoints,  Worst Slack        0.019ns,  Total Violation       0.000ns
+---------------------------------------------------------------------------------------------------
+
+Max Delay Paths
+--------------------------------------------------------------------------------------
+Slack (VIOLATED) :        -0.412ns  (required time - arrival time)
+  Source:                 u_vid_in/hsync_d_reg[0]/C
+                            (rising edge-triggered cell FDRE clocked by clk_pixel)
+  Destination:            u_axi_stream_out/tvalid_sync_reg[1]/D
+                            (rising edge-triggered cell FDRE clocked by axi_aclk)
+  Path Group:             axi_aclk
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            10.000ns  (axi_aclk rise@10.000ns - clk_pixel rise@0.000ns)
+  Data Path Delay:        9.877ns  (logic 1.243ns (12.59%)  route 8.634ns (87.41%))
+  Logic Levels:           3  (LUT2=1 LUT3=1 LUT4=1)
+
+------------------------------------------------------------------------------------------------
+| Timing Summary End
+------------------------------------------------------------------------------------------------

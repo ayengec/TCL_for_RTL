@@ -1,0 +1,33 @@
+TIMING SUMMARY REPORT
+Parsed from: ./sample_reports/timing_summary.rpt
+--------------------------------------------------------------
+  [!] Violated path slack: -1.247ns
+  [!] Violated path slack: -0.934ns
+  [!] Violated path slack: -0.721ns
+  [!] Violated path slack: -0.412ns
+
+Design : axi_image_pipeline_top
+Device : xc7z020clg400-1
+--------------------------------------------------------------
+
+=== Overall Timing ===
+  WNS (Worst Negative Slack) : -1.247 ns
+  TNS (Total Negative Slack) : -89.412 ns
+  Failing Endpoints          : 37
+  WHS (Worst Hold Slack)     : 0.043 ns
+  THS (Total Hold Slack)     : 0.000 ns
+
+  STATUS : *** TIMING FAILED *** (WNS = -1.247 ns)
+
+=== Clock Domains ===
+  clk_100MHz            Period: 10.000 ns   Freq: 100.000 MHz
+  clk_200MHz            Period:  5.000 ns   Freq: 200.000 MHz
+  clk_pixel             Period: 13.468 ns   Freq:  74.250 MHz
+  axi_aclk              Period: 10.000 ns   Freq: 100.000 MHz
+
+=== Per-Clock Violations ===
+  [FAIL] clk_100MHz       WNS=-1.247 ns  TNS= -89.412 ns  Failing=37
+  [ OK ] clk_200MHz       WNS= 0.312 ns  TNS=   0.000 ns  Failing=0
+  [ OK ] clk_pixel        WNS= 0.893 ns  TNS=   0.000 ns  Failing=0
+  [ OK ] axi_aclk         WNS= 0.215 ns  TNS=   0.000 ns  Failing=0
+--------------------------------------------------------------

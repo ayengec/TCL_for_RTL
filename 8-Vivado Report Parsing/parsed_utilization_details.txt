@@ -1,0 +1,16 @@
+UTILIZATION REPORT
+Parsed from: ./sample_reports/utilization.rpt
+--------------------------------------------------------------
+
+  Resource                  Used / Avail       Util%
+  --------                  ----   -----       -----
+  [    OK     ] Slice LUTs               21847 / 53200      41.07%
+  [    OK     ] LUT as Logic             19234 / 53200      36.15%
+  [    OK     ] LUT as Memory             2613 / 17400      15.02%
+  [    OK     ] Slice Registers          28941 / 106400     27.20%
+  [    OK     ] Block RAM Tile              58 / 140        41.43%
+  [    OK     ] DSPs                        94 / 220        42.73%
+  [    OK     ] Bonded IOB                  48 / 200        24.00%
+  [    OK     ] BUFGCTRL                     4 / 32         12.50%
+  [    OK     ] MMCME2_ADV                   2 / 4          50.00%
+--------------------------------------------------------------
