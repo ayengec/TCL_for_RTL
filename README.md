@@ -64,6 +64,8 @@ Custom Reporting & Constraints: TCL allows me to parse timing reports and genera
 | 5 | [File I/O](https://github.com/ayengec/TCL-scripts/tree/main/5-File-IO) | Reading and writing files, log generation |
 | 6 | [Regular Expressions](https://github.com/ayengec/TCL-scripts/tree/main/6-Regex) | Pattern matching, text parsing |
 | 7 | [Vivado Testbench Example](https://github.com/ayengec/TCL-scripts/tree/main/7-Vivado-Testbench-Example) | Full simulation automation with xvlog/xelab/xsim |
+| 8 | [Report Parsing](https://github.com/ayengec/TCL-scripts/tree/main/8-Report-Parsing) | Parsing Vivado timing & utilization reports, automated log generation |
+
 
 > More examples will be added over time.
 
