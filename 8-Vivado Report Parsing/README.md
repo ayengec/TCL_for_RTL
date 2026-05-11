@@ -1,4 +1,4 @@
-Vivado Report Parsing with TCL
+# Vivado Report Parsing with TCL
 
 Vivado generates `.rpt` files after every synthesis and implementation run. This project shows how to parse those reports automatically using TCL — extracting timing violations, resource usage, and clock analysis, then writing clean summary logs.
 
