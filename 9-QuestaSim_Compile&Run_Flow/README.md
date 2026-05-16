@@ -18,11 +18,11 @@ You need to have QuestaSim or ModelSim installed and accessible in your system `
 ### 1. Batch Mode (Terminal/Console)
 The fastest way to run regressions. This will execute the entire flow in the terminal without opening the graphical interface, generate the coverage report, and exit automatically:
 ```sh
-vsim -c -do questa_simulation_flow.tcl
+vsim -c -do qcompile_run.tcl.tcl
 ```
 
 ### 2. GUI Mode
 If you want to debug the design and view the waveforms, open the simulator GUI and run the script from the internal TCL console:
 ```tcl
-do questa_simulation_flow.tcl
+do qcompile_run.tcl.tcl
 ```
