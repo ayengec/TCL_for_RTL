@@ -1,9 +1,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <h3 align="center">TCL SCRIPTING for EDA RTL</h3>
+  <h3 align="center">Xcelium SCRIPT with TCL</h3>
   <p align="center">
-    TCL Script Examples for RTL, FPGA & ASIC Design Flows
   </p>
 </p>
 
