@@ -1,126 +1,59 @@
-<!-- PROJECT LOGO -->
-<br />
-<p align="center">
-  <h3 align="center">Xcelium SCRIPT with TCL</h3>
-  <p align="center">
-  </p>
-</p>
+# Cadence Xcelium Compile & Run Flow
 
----
+This directory demonstrates the complete flow for compiling and simulating SystemVerilog designs using **Cadence Xcelium**, specifically highlighting how bash commands (`xrun`) and TCL scripts work together.
 
-## About This Repository
+Unlike Siemens QuestaSim, which often uses TCL for both compilation and execution (`vlog` / `vsim`), Cadence Xcelium uses a unified single-step command (`xrun`) from the bash shell for compilation and elaboration. TCL is then passed into the simulator to control the execution phase (e.g., waveform dumping, coverage management, and simulation length).
 
-This repo is a growing collection of TCL script examples, starting from the very basics and gradually moving toward real-world EDA tool usage — synthesis, simulation, testbench automation, and more.
+## 1. The Compile Flow (`xrun`)
 
-The examples are kept intentionally simple and readable. Each folder is self-contained, so you can jump to whatever topic you need without going through everything in order. Whether you're just getting started with TCL syntax or trying to automate a Vivado project, there should be something useful here.
+Compilation in Xcelium is heavily command-line driven. Instead of a TCL script, you typically use `xrun` with a file list (`.f` file) or direct file inputs. 
 
----
+A standard compilation command looks like this:
+```bash
+xrun -clean \
+     -sv \
+     -access +rwc \
+     -coverage all \
+     -f rtl_files.f \
+     tb_top.sv
+```
+* **`-clean`**: Removes previous compilation databases (INCA_libs).
+* **`-sv`**: Enables SystemVerilog compilation.
+* **`-access +rwc`**: Grants Read/Write/Connectivity access to the simulation database. **(Crucial: If you don't include this, you won't be able to dump waveforms!)**
+* **`-coverage all`**: Instruments the code for coverage collection.
+* **`-f rtl_files.f`**: Points to a text file containing the list of your RTL files and include directories.
 
-## Why TCL for RTL / FPGA / ASIC?
+## 2. The Run Flow (TCL Dialect)
 
-If you've ever opened Vivado, Quartus, Design Compiler, or Cadence Innovus, you've already been using TCL — you just might not have noticed. Pretty much every major EDA tool in the industry is scripted in TCL, and that's not an accident. TCL was designed to be embedded inside other applications, which makes it a perfect fit for tools that need a lightweight, flexible scripting layer on top of a heavy C/C++ core.
+Once compiled, Xcelium needs instructions on how to run the simulation. This is where the `cadence_xcelium_simulation_flow.tcl` script comes in. It highlights Cadence's proprietary TCL dialects:
 
-Here's why it actually matters in practice:
+*   **`database`**: Manages the Cadence SHM (Simulation History Manager) waveform database. The script creates and opens a database named `waves.shm`.
+*   **`probe`**: Instructs the simulator on what signals to record. In this example, we probe all signals within `tb_top` and all its sub-hierarchies recursively (`-depth all`).
+*   **`coverage`**: Controls the dumping of coverage data dynamically during simulation.
+*   **`run`**: Executes the simulation for a specific duration or until a `$finish` statement is encountered in the SystemVerilog code.
+*   **`exit`**: Safely closes the database (preventing corruption) and exits the Xcelium environment.
 
-**Automation and reproducibility.** Running synthesis or simulation by clicking through a GUI every time is fine when you're experimenting, but it doesn't scale. With a TCL script, you can define your entire flow — reading source files, setting constraints, running synthesis, writing reports — and rerun it with a single command. This is essential when you're working on a team, running nightly regressions, or trying to reproduce a result someone else got three months ago.
+## How to Combine Compile & Run
 
-**Portability across tools.** The same TCL knowledge that lets you script Vivado also transfers to Synopsys and Cadence tools. The syntax is the same; it's just the built-in commands that change. Once you're comfortable with the language itself, picking up a new tool's TCL API is mostly about reading documentation, not learning a whole new language.
+To compile the design and immediately run it using the TCL script, you combine the two steps into a single `xrun` command by using the `-input` flag.
 
-**Testbench and simulation control.** In simulation environments like Vivado's xsim or ModelSim/QuestaSim, TCL is how you control the simulation programmatically — applying stimulus, checking outputs, logging results to files, looping through multiple test cases automatically. This is much more maintainable than writing everything in the HDL testbench itself.
+### Batch Mode (No GUI)
+```bash
+xrun -clean -access +rwc tb_top.sv -input cadence_xcelium_simulation_flow.tcl
+```
+*Wait for the compilation and simulation to finish. The waveforms will be saved in the `waves.shm` directory.*
 
-**Constraint management.** XDC files (used in Xilinx/AMD tools) are actually TCL scripts. Every `set_property`, `create_clock`, and `set_false_path` command is just TCL. Understanding TCL properly means you can write smarter, conditional, parametric constraints instead of static files that break every time you rename a port.
-
-**CI/CD for hardware.** As hardware teams start adopting software-style development practices — version control, pull requests, automated testing — having your entire FPGA/ASIC flow scripted in TCL is what makes that possible. You can't easily plug a GUI into a Jenkins pipeline. You can plug a TCL script in without much trouble.
-
-In short: TCL is not the most glamorous language, and it has its quirks, but fluency in it is one of those practical skills that quietly makes a digital design engineer significantly more effective.
-
----
-## Why Every RTL Engineer Should Master TCL?
-
-In the world of FPGA and ASIC design, GUI is for exploration, but TCL is for production. While clicking buttons in Vivado or Quartus works for small projects, professional hardware design requires automation, repeatability, and precision.
-
-Here is why TCL is my go-to scripting language in this repo:
-
-*   **Eliminating Human Error:** Automating the build flow (Synthesis, Implementation, Bitstream generation) ensures that the exact same process is followed every time, avoiding "magic clicks" in the GUI.
-*   **EDA Tool Mastery:** Almost every major EDA tool (Vivado, Quartus, ModelSim, Genus, Innovus) uses TCL as its native command language. If you know TCL, you own the tool.
-*   **Version Control Friendly:** Instead of tracking huge binary project files (like .xpr or .qpf), I track a single TCL script that recreates the entire project from scratch. This keeps my repositories clean and Git-friendly.
-*   **Custom Reporting & Constraints:** TCL allows me to parse timing reports and generate custom power/area analyses that the standard GUI doesn't provide.
-
-*"If you are doing the same task twice in an EDA tool, you should have scripted it in TCL already."*
----
-
-## Contents
-
-| # | Topic | Description |
-|---|-------|-------------|
-| 1 | [Basic Scripts](https://github.com/ayengec/TCL-scripts/tree/main/1-Basics) | Variables, puts, expressions, string operations |
-| 2 | [Conditions and Loops](https://github.com/ayengec/TCL-scripts/tree/main/2-If-else-Loops) | if/else, while, for, foreach |
-| 3 | [Functions (Procedures)](https://github.com/ayengec/TCL-scripts/tree/main/3-Functions(Procedures)) | proc definitions, arguments, return values |
-| 4 | [Data Types](https://github.com/ayengec/TCL-scripts/tree/main/4-Data-Types) | Lists, dicts, arrays — with practical examples |
-| 5 | [File I/O](https://github.com/ayengec/TCL-scripts/tree/main/5-File-IO) | Reading and writing files, log generation |
-| 6 | [Regular Expressions](https://github.com/ayengec/TCL-scripts/tree/main/6-Regex) | Pattern matching, text parsing |
-| 7 | [Vivado Testbench Example](https://github.com/ayengec/TCL-scripts/tree/main/7-Vivado-Testbench-Example) | Full simulation automation with `xvlog` / `xelab` / `xsim` |
-| 8 | [Report Parsing](https://github.com/ayengec/TCL_for_RTL/tree/main/8-Vivado%20Report%20Parsing) | Parsing Vivado timing & utilization reports, automated log generation |
-| **9** | **[QuestaSim Flow](https://github.com/ayengec/TCL_for_RTL/tree/main/9-QuestaSim-Flow)** | **Automated simulation dialect using `vlib`, `vlog`, `vsim`, and coverage handling** |
-| **10** | **[Cadence Xcelium Flow](https://github.com/ayengec/TCL_for_RTL/tree/main/10-Cadence-Xcelium-Flow)** | **Xcelium-specific `database` initialization, `probe` setup, and execution control** |
-
-> More examples will be added over time.
-
----
-
-## Getting Started
-
-### Clone the repo
-
-```sh
-git clone https://github.com/ayengec/TCL-scripts.git
+### Viewing Waveforms (SimVision)
+After the batch simulation finishes, you can open the generated database using Cadence SimVision:
+```bash
+simvision waves.shm
 ```
 
-No dependencies are needed for the basic examples (folders 1–6). 
-For the EDA-specific examples (folders 7–10), you'll need the respective toolkits (Xilinx Vivado, Siemens QuestaSim/ModelSim, or Cadence Xcelium) installed and added to your system `PATH`.
-
----
-
-## Running the Examples
-
-### Option 1 — Online (no install required)
-
-Paste any `.tcl` file contents into the online interpreter and hit **F8** to run:
-
-👉 [rextester.com TCL compiler](https://rextester.com/l/tcl_online_compiler)
-
-Works well for everything in folders 1–6.
-
-### Option 2 — Install TCL locally
-
-Download and install from ActiveState (Windows / Linux / macOS):
-
-👉 [activestate.com/products/tcl](https://www.activestate.com/products/tcl/downloads/)
-
-Then run any script with:
-
-```sh
-tclsh your_script.tcl
+### GUI Mode (Interactive)
+If you prefer to compile, load the GUI immediately, and let the script execute its initialization steps (like probing signals) before you manually hit "Run", use the `-gui` flag:
+```bash
+xrun -clean -access +rwc tb_top.sv -gui -input cadence_xcelium_simulation_flow.tcl
 ```
 
-### Option 3 — Vivado TCL Console (Folder 7 & 8)
-
-For the Xilinx EDA examples, open Vivado and use the TCL console at the bottom of the IDE, or run in batch mode:
-
-```sh
-vivado -mode batch -source run_sim_fifo.tcl
-```
-
-### Option 4 — QuestaSim & Cadence Execution (Folder 9 & 10)
-
-For tool-specific dialects, you can execute the scripts directly using their native simulator binaries from the terminal:
-
-```sh
-# For QuestaSim / ModelSim
-vsim -c -do questa_simulation_flow.tcl
-
-# For Cadence Xcelium (passed as input to xrun)
-xrun -f file_list.f -input cadence_xcelium_simulation_flow.tcl
-```
-
----
+## Summary
+This repository proves that a verification engineer must understand where bash scripting ends and TCL scripting begins. In the Cadence ecosystem, **Bash/Makefiles handle the Compile**, while **TCL handles the Run**.
